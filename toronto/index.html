@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Power of Love Gala · Toronto | Ryan Gordy Foundation</title>
+<meta name="description" content="The Ryan Gordy Foundation comes to Toronto: The Power of Love Gala honouring Wes Hall, Saturday, November 7, 2026 at The Ritz-Carlton, Toronto. All funds raised in Toronto stay in the Toronto community.">
+<meta property="og:title" content="The Power of Love Gala · Toronto">
+<meta property="og:description" content="An evening honouring Wes Hall. Saturday, November 7, 2026 · The Ritz-Carlton, Toronto.">
+<meta property="og:image" content="rgf-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,400;1,500&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fbf5e9;
+    --cream-deep: #f3e8d2;
+    --navy: #1d2a4b;
+    --gold: #a07e46;
+    --gold-text: #8a6a35; /* small gold text: passes contrast on cream */
+    --gold-light: #e9cf8e;
+    --gold-mid: #c9a45c;
+    --ink: #2b2f3a;
+    --ink-soft: #5d5a52;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(ellipse at 50% 35%, #fffaf0 0%, var(--cream) 45%, var(--cream-deep) 100%) fixed, var(--cream);
+    color: var(--ink);
+    font-family: "Playfair Display", Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* gold ribbon corners, echoing the VIP invitation */
+  .ribbon { position: absolute; width: 260px; height: 260px; pointer-events: none; z-index: 0; }
+  .ribbon.tl { top: 0; left: 0; }
+  .ribbon.br { bottom: 0; right: 0; transform: rotate(180deg); }
+
+  main {
+    position: relative; z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 0;
+    text-align: center;
+  }
+  .logo { width: min(300px, 70vw); height: auto; }
+
+  .kicker {
+    margin-top: 28px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--navy);
+  }
+  h1 {
+    margin-top: 10px;
+    font-weight: 800;
+    font-size: clamp(34px, 7.4vw, 62px);
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .rule { width: 160px; height: 2px; margin: 22px auto; background: linear-gradient(90deg, transparent, var(--gold-mid), transparent); }
+  .honouring { font-style: italic; font-size: 21px; color: var(--gold-text); }
+
+  .portrait {
+    width: 180px; height: 180px; margin: 22px auto 0;
+    border-radius: 50%;
+    padding: 5px;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold) 60%, var(--gold-light));
+    box-shadow: 0 14px 34px rgba(29,42,75,0.22);
+  }
+  .portrait img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+
+  .honoree {
+    margin-top: 20px;
+    font-weight: 800;
+    font-size: clamp(40px, 8vw, 64px);
+    letter-spacing: 0.04em;
+    color: var(--navy);
+  }
+  .award { margin-top: 4px; font-size: 17px; font-style: italic; color: var(--ink-soft); }
+  .host { margin-top: 6px; font-size: 18px; font-style: italic; font-weight: 500; color: var(--gold-text); }
+
+  .when {
+    margin: 34px auto 0;
+    padding: 22px 16px;
+    border-top: 1px solid rgba(160,126,70,0.45);
+    border-bottom: 1px solid rgba(160,126,70,0.45);
+    max-width: 560px;
+  }
+  .date {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: clamp(17px, 3.4vw, 22px);
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    text-transform: uppercase;
+  }
+  .venue { margin-top: 8px; font-size: 22px; font-weight: 700; color: var(--navy); }
+  .times { margin-top: 16px; display: flex; justify-content: center; }
+  .times div { flex: 0 1 200px; padding: 0 12px; }
+  .times div + div { border-left: 1px solid rgba(160,126,70,0.6); }
+  .times b { display: block; font-size: 24px; font-weight: 700; color: var(--gold); }
+  .times span { font-size: 16px; color: var(--ink); }
+
+  .mission {
+    margin: 36px auto 0;
+    max-width: 580px;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .mission::before { content: "\2665"; display: block; font-size: 13px; color: var(--gold-mid); margin-bottom: 6px; }
+  .mission strong { color: var(--navy); }
+  .stay {
+    margin-top: 32px;
+    font-size: clamp(20px, 3.8vw, 26px);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gold-text);
+  }
+
+  .rsvp {
+    margin: 36px auto 0;
+    max-width: 380px;
+    padding: 22px 24px;
+    border: 2px solid var(--gold-mid);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.45);
+  }
+  .rsvp-label {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700; font-size: 13px; letter-spacing: 0.3em;
+    color: var(--gold-text);
+  }
+  .rsvp a {
+    display: inline-block; margin-top: 8px;
+    font-size: 18px; font-weight: 700; color: var(--navy); text-decoration: none;
+    word-break: break-word;
+  }
+  .rsvp a:hover { text-decoration: underline; }
+  .rsvp .only { margin-top: 6px; font-style: italic; font-size: 15px; color: var(--ink-soft); }
+
+  .skyline { display: block; width: 100%; height: auto; margin-top: 56px; }
+  footer {
+    background: var(--navy);
+    color: #cfd6e6;
+    text-align: center;
+    padding: 22px 16px 26px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    position: relative; z-index: 1;
+  }
+  footer a { color: var(--gold-light); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .ribbon { width: 150px; height: 150px; }
+    main { padding-top: 44px; }
+    .portrait { width: 150px; height: 150px; }
+    .mission { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+  <svg class="ribbon tl" viewBox="0 0 260 260" aria-hidden="true">
+    <defs>
+      <linearGradient id="rib" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#8a6a35"/>
+        <stop offset=".45" stop-color="#f3dc9c"/>
+        <stop offset=".7" stop-color="#c9a45c"/>
+        <stop offset="1" stop-color="#8a6a35"/>
+      </linearGradient>
+    </defs>
+    <path d="M0 0 H120 L0 150 Z" fill="#1d1f26"/>
+    <path d="M0 175 C40 120 70 110 95 70 C110 45 130 25 165 0 L182 0 C150 25 125 50 108 80 C85 120 55 135 12 190 Z" fill="url(#rib)"/>
+    <path d="M60 0 C55 30 75 55 70 90 C68 105 58 112 48 108 C62 98 60 80 50 60 C42 42 40 18 44 0 Z" fill="url(#rib)" opacity=".9"/>
+  </svg>
+  <svg class="ribbon br" viewBox="0 0 260 260" aria-hidden="true">
+    <path d="M0 0 H120 L0 150 Z" fill="#1d1f26"/>
+    <path d="M0 175 C40 120 70 110 95 70 C110 45 130 25 165 0 L182 0 C150 25 125 50 108 80 C85 120 55 135 12 190 Z" fill="url(#rib)"/>
+    <path d="M60 0 C55 30 75 55 70 90 C68 105 58 112 48 108 C62 98 60 80 50 60 C42 42 40 18 44 0 Z" fill="url(#rib)" opacity=".9"/>
+  </svg>
+
+  <main>
+    <img class="logo" src="rgf-logo.png" alt="Ryan Gordy Foundation">
+
+    <p class="kicker">Announcing our Toronto debut</p>
+    <h1>The Power of Love Gala</h1>
+    <div class="rule"></div>
+    <p class="honouring">An Evening Honouring</p>
+
+    <div class="portrait"><img src="wes-hall.jpg" alt="Wes Hall"></div>
+    <p class="honoree">WES HALL</p>
+    <p class="award">Honoured with the Power of Love Award</p>
+    <p class="host">Hosted by Ben Mulroney</p>
+
+    <div class="when">
+      <p class="date">Saturday, November 7, 2026</p>
+      <p class="venue">The Ritz-Carlton, Toronto</p>
+      <div class="times">
+        <div><b>6:00 PM</b><span>Cocktails</span></div>
+        <div><b>7:00 PM</b><span>Dinner &amp; Celebration</span></div>
+      </div>
+    </div>
+
+    <p class="mission">In loving memory of <strong>Ryan Gordy</strong>, supporting young adults impacted by cancer, in partnership with <strong>Princess Margaret Cancer Centre’s AYA Oncology Program</strong>.</p>
+
+    <p class="stay">All funds raised in Toronto stay in the Toronto community.</p>
+
+    <div class="rsvp">
+      <p class="rsvp-label">VIP RSVP</p>
+      <a href="mailto:Anita@ryangordyfoundation.org?subject=Power%20of%20Love%20Gala%20Toronto%20RSVP">Anita@ryangordyfoundation.org</a>
+      <p class="only">By invitation only</p>
+    </div>
+  </main>
+
+  <!-- Toronto skyline: original vector drawing, no licensing needed -->
+  <svg class="skyline" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1d2a4b" stop-opacity=".75"/>
+        <stop offset="1" stop-color="#1d2a4b"/>
+      </linearGradient>
+    </defs>
+    <g fill="url(#sky)">
+      <rect x="0" y="170" width="1200" height="50"/>
+      <rect x="40" y="150" width="50" height="70"/>
+      <rect x="95" y="128" width="38" height="92"/>
+      <rect x="138" y="140" width="56" height="80"/>
+      <rect x="200" y="112" width="34" height="108"/>
+      <rect x="240" y="132" width="46" height="88"/>
+      <!-- Rogers Centre dome -->
+      <path d="M300 180 Q360 128 420 180 Z"/>
+      <!-- CN Tower -->
+      <path d="M462 220 L468 92 L474 92 L480 220 Z"/>
+      <rect x="456" y="84" width="30" height="10" rx="4"/>
+      <ellipse cx="471" cy="80" rx="11" ry="7"/>
+      <rect x="469.5" y="6" width="3" height="76"/>
+      <rect x="500" y="122" width="44" height="98"/>
+      <rect x="550" y="96" width="36" height="124"/>
+      <rect x="592" y="70" width="40" height="150"/>
+      <rect x="638" y="108" width="34" height="112"/>
+      <rect x="678" y="60" width="42" height="160"/>
+      <rect x="726" y="88" width="38" height="132"/>
+      <rect x="770" y="118" width="50" height="102"/>
+      <rect x="826" y="80" width="34" height="140"/>
+      <rect x="866" y="132" width="48" height="88"/>
+      <rect x="920" y="104" width="40" height="116"/>
+      <rect x="966" y="142" width="54" height="78"/>
+      <rect x="1026" y="122" width="36" height="98"/>
+      <rect x="1068" y="150" width="60" height="70"/>
+      <rect x="1134" y="136" width="40" height="84"/>
+    </g>
+    <path d="M0 170 H1200" stroke="#c9a45c" stroke-width="2" opacity=".7"/>
+  </svg>
+  <footer>
+    Learn more about our work at <a href="https://www.ryangordyfoundation.org">ryangordyfoundation.org</a>
+  </footer>
+</body>
+</html>
