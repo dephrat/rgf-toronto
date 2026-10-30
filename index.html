@@ -4,21 +4,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Popup test page</title>
-<style>
-  body { font-family: system-ui, sans-serif; margin: 0; background: #fff; color: #222; }
-  header { padding: 20px 24px; border-bottom: 1px solid #ddd; }
-  main { padding: 40px 24px; max-width: 700px; }
-  a { color: #1d2a4b; }
-</style>
+<title>Home · Demo site</title>
+<link rel="stylesheet" href="/toy.css">
 </head>
 <body>
-  <!-- Stand-in for the foundation's homepage, only for testing the popup locally -->
-  <header><strong>Demo homepage</strong> (stand-in for ryangordyfoundation.org, to show the popup)</header>
+  <!-- Wireframe stand-in for ryangordyfoundation.org, only there to show the popup -->
+  <header>
+    <a href="/" class="logo" aria-label="Home"></a>
+    <nav>
+      <a href="/" aria-current="page">Home</a>
+      <a href="/about/">About</a>
+      <a href="/programs/">Programs</a>
+      <a href="/events/">Events</a>
+      <a href="/contact/">Contact</a>
+      <a href="/toronto/">Toronto Gala</a>
+    </nav>
+  </header>
   <main>
-    <p>The popup should appear over this page. Close it, then reload: it should stay closed. Open this page in a new tab: it should appear again.</p>
-    <p><a href="/toronto/">Go to /toronto</a></p>
+    <div class="hero"></div>
+    <div class="bar title"></div>
+    <div class="bar"></div>
+    <div class="bar short"></div>
+    <div class="cards"><div class="card"></div><div class="card"></div><div class="card"></div></div>
+    <div class="bar title"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar short"></div>
   </main>
+  <footer></footer>
   <script src="/toronto/toronto-popup.js" defer></script>
 </body>
 </html>
