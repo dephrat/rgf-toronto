@@ -28,10 +28,11 @@
   // after the last letter doesn't pull them off-centre.
   var css = document.createElement("style");
   css.textContent = [
-    ".rgf-pop-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(17,22,38,.62);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .35s}",
-    ".rgf-pop-overlay.rgf-in{opacity:1}",
-    ".rgf-pop{position:relative;width:100%;max-width:620px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:radial-gradient(ellipse at 50% 30%,#fffaf0,#fbf5e9 50%,#f3e8d2);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;transform:translateY(16px);transition:transform .35s}",
-    ".rgf-pop-overlay.rgf-in .rgf-pop{transform:none}",
+    ".rgf-pop-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(17,22,38,.62);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transition:opacity .45s ease,-webkit-backdrop-filter .8s ease,backdrop-filter .8s ease}",
+    ".rgf-pop-overlay.rgf-in{opacity:1;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}",
+    ".rgf-pop-overlay.rgf-out{opacity:0;transition:opacity .3s ease}",
+    ".rgf-pop{position:relative;width:100%;max-width:620px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:radial-gradient(ellipse at 50% 30%,#fffaf0,#fbf5e9 50%,#f3e8d2);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;opacity:0}",
+    ".rgf-pop-overlay.rgf-in .rgf-pop{animation:rgfCard .9s cubic-bezier(.16,1,.3,1) .05s both}",
     ".rgf-pop-frame{position:relative;margin:8px;border:1px solid rgba(201,164,92,.55);border-radius:10px;padding:36px 24px 28px;container-type:inline-size}",
     ".rgf-pop p{margin:0}",
     ".rgf-pop-xwrap{position:sticky;top:0;height:0;z-index:2}",
@@ -39,7 +40,7 @@
     ".rgf-pop-x:hover,.rgf-pop-x:focus-visible{background:rgba(29,42,75,.08);outline:none}",
     ".rgf-pop-logo{display:block;width:230px;max-width:70%;height:auto;margin:0 auto}",
     ".rgf-pop-kicker{margin-top:20px!important;font-family:Montserrat,sans-serif;font-weight:700;font-size:min(12px,3cqw);white-space:nowrap;letter-spacing:.28em;padding-left:.28em;text-transform:uppercase;color:#1d2a4b}",
-    ".rgf-pop-title{margin-top:8px!important;font-weight:800;font-size:min(38px,5.6cqw);line-height:1.1;white-space:nowrap;text-transform:uppercase;color:#a07e46}",
+    ".rgf-pop-title{margin-top:8px!important;font-weight:800;font-size:min(38px,5.6cqw);line-height:1.1;white-space:nowrap;text-transform:uppercase;color:#a07e46;background:linear-gradient(110deg,#a07e46 0 40%,#f6e3a8 50%,#a07e46 60% 100%);background-size:300% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}",
     ".rgf-pop-rule{width:140px;height:2px;margin:16px auto;background:linear-gradient(90deg,transparent,#c9a45c,transparent)}",
     ".rgf-pop-hon{font-style:italic;font-weight:500;font-size:18px;color:#8a6a35}",
     ".rgf-pop-photo{display:block;width:132px;height:132px;margin:14px auto 0;border-radius:50%;object-fit:cover;border:4px solid #c9a45c;box-shadow:0 10px 24px rgba(29,42,75,.2)}",
@@ -47,7 +48,7 @@
     ".rgf-pop-award{margin-top:4px!important;font-style:italic;font-size:15px;color:#5d5a52}",
     ".rgf-pop-host{margin-top:2px!important;font-style:italic;font-weight:500;font-size:16px;color:#8a6a35}",
     ".rgf-pop-when{margin:20px auto 0;padding:16px 0;max-width:460px;border-top:1px solid rgba(160,126,70,.45);border-bottom:1px solid rgba(160,126,70,.45)}",
-    ".rgf-pop-date{font-family:Montserrat,sans-serif;font-weight:700;font-size:min(16px,4.2cqw);letter-spacing:.08em;padding-left:.08em;text-transform:uppercase;color:#1d2a4b}",
+    ".rgf-pop-date{font-family:Montserrat,sans-serif;font-weight:700;font-size:min(16px,4.4cqw);white-space:nowrap;letter-spacing:.08em;padding-left:.08em;text-transform:uppercase;color:#1d2a4b}",
     ".rgf-pop-venue{margin-top:6px!important;font-weight:700;font-size:19px;color:#1d2a4b}",
     ".rgf-pop-times{display:flex;justify-content:center;margin-top:12px}",
     ".rgf-pop-times div{flex:1 1 0;max-width:180px;padding:0 10px}",
@@ -63,7 +64,21 @@
     ".rgf-pop-rsvp a:hover{text-decoration:underline}",
     ".rgf-pop-only{margin-top:4px!important;font-style:italic;font-size:14px;color:#5d5a52}",
     ".rgf-pop-continue{display:block;min-height:44px;margin:20px auto 0;padding:0 28px;border:0;border-radius:999px;background:#1d2a4b;color:#fbf5e9;font-family:Montserrat,sans-serif;font-weight:700;font-size:12px;letter-spacing:.2em;text-indent:.2em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 20px rgba(29,42,75,.3)}",
-    ".rgf-pop-continue:hover,.rgf-pop-continue:focus-visible{filter:brightness(1.15);outline:none}"
+    ".rgf-pop-continue:hover,.rgf-pop-continue:focus-visible{filter:brightness(1.15);outline:none}",
+    // Reveal: card rises in, then each line follows in turn (--i is set per child below)
+    "@keyframes rgfCard{from{opacity:0;transform:translateY(48px) scale(.92)}to{opacity:1;transform:none}}",
+    "@keyframes rgfUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}",
+    "@keyframes rgfDraw{from{opacity:0;transform:scaleX(0)}to{opacity:1;transform:scaleX(1)}}",
+    "@keyframes rgfPhoto{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}",
+    "@keyframes rgfGlow{0%,100%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 0 rgba(201,164,92,0)}50%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 10px rgba(201,164,92,.28)}}",
+    "@keyframes rgfShine{from{background-position:100% 0}to{background-position:0 0}}",
+    "@keyframes rgfFrame{from{border-color:rgba(201,164,92,0)}to{border-color:rgba(201,164,92,.55)}}",
+    ".rgf-in .rgf-pop-frame{animation:rgfFrame 1.2s ease .4s both}",
+    ".rgf-in .rgf-pop-frame>*{animation:rgfUp .7s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(.35s + var(--i) * 60ms)}",
+    ".rgf-in .rgf-pop-frame>.rgf-pop-rule{animation-name:rgfDraw;animation-duration:.9s}",
+    ".rgf-in .rgf-pop-frame>.rgf-pop-photo{animation:rgfPhoto .8s cubic-bezier(.34,1.56,.64,1) both,rgfGlow 1.4s ease-in-out both;animation-delay:calc(.35s + var(--i) * 60ms),1.3s}",
+    ".rgf-in .rgf-pop-frame>.rgf-pop-title{animation:rgfUp .7s cubic-bezier(.16,1,.3,1) both,rgfShine 1.6s ease-in-out both;animation-delay:calc(.35s + var(--i) * 60ms),1s}",
+    "@media (prefers-reduced-motion:reduce){.rgf-pop-overlay,.rgf-pop-overlay.rgf-in{transition:opacity .2s;-webkit-backdrop-filter:none;backdrop-filter:none}.rgf-in .rgf-pop,.rgf-in .rgf-pop-frame,.rgf-in .rgf-pop-frame>*{animation:none!important;opacity:1}}"
   ].join("");
   document.head.appendChild(css);
 
@@ -101,11 +116,14 @@
     '</div>' +
     '</div>';
 
+  var kids = overlay.querySelector(".rgf-pop-frame").children;
+  for (var i = 0; i < kids.length; i++) kids[i].style.setProperty("--i", i);
+
   function close() {
     try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
-    overlay.classList.remove("rgf-in");
+    overlay.classList.add("rgf-out");
     document.removeEventListener("keydown", onKey);
-    setTimeout(function () { overlay.remove(); }, 350);
+    setTimeout(function () { overlay.remove(); }, 300);
   }
   function onKey(e) { if (e.key === "Escape") close(); }
 
