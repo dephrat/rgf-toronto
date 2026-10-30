@@ -5,12 +5,12 @@
  * platform's "custom code / footer scripts" setting):
  *   <script src="/toronto/toronto-popup.js" defer></script>
  *
- * Behaviour: shows once per visit. Closing it (X, "Maybe later", clicking
- * outside, or Esc) hides it for the rest of the visit. sessionStorage is
- * cleared when the browser tab closes, so the next visit shows it again.
+ * Behaviour: shows the full announcement once per visit. Closing it (X,
+ * "Continue to site", clicking outside, or Esc) hides it for the rest of the
+ * visit. sessionStorage is cleared when the browser tab closes, so the next
+ * visit shows it again.
  */
 (function () {
-  var PAGE_URL = "/toronto/";
   var LOGO_URL = "/toronto/rgf-logo.png";
   var PHOTO_URL = "/toronto/wes-hall.jpg";
   var KEY = "rgfTorontoPopupClosed";
@@ -21,32 +21,49 @@
 
   var font = document.createElement("link");
   font.rel = "stylesheet";
-  font.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,500&family=Montserrat:wght@600;700&display=swap";
+  font.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,400;1,500&family=Montserrat:wght@600;700&display=swap";
   document.head.appendChild(font);
 
+  // Letter-spaced caps get matching left padding so the trailing space
+  // after the last letter doesn't pull them off-centre.
   var css = document.createElement("style");
   css.textContent = [
     ".rgf-pop-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(17,22,38,.62);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .35s}",
     ".rgf-pop-overlay.rgf-in{opacity:1}",
-    ".rgf-pop{position:relative;width:100%;max-width:480px;max-height:calc(100vh - 32px);overflow:auto;background:radial-gradient(ellipse at 50% 30%,#fffaf0,#fbf5e9 50%,#f3e8d2);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);padding:40px 28px 30px;text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;transform:translateY(16px);transition:transform .35s}",
+    ".rgf-pop{position:relative;width:100%;max-width:620px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:radial-gradient(ellipse at 50% 30%,#fffaf0,#fbf5e9 50%,#f3e8d2);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;transform:translateY(16px);transition:transform .35s}",
     ".rgf-pop-overlay.rgf-in .rgf-pop{transform:none}",
-    ".rgf-pop::before{content:'';position:absolute;inset:8px;border:1px solid rgba(201,164,92,.55);border-radius:10px;pointer-events:none}",
-    ".rgf-pop-x{position:absolute;top:12px;right:12px;width:44px;height:44px;border:0;background:transparent;font-size:26px;line-height:1;color:#1d2a4b;cursor:pointer;border-radius:50%;z-index:1}",
+    ".rgf-pop-frame{position:relative;margin:8px;border:1px solid rgba(201,164,92,.55);border-radius:10px;padding:36px 24px 28px;container-type:inline-size}",
+    ".rgf-pop p{margin:0}",
+    ".rgf-pop-xwrap{position:sticky;top:0;height:0;z-index:2}",
+    ".rgf-pop-x{position:absolute;top:-28px;right:-16px;width:44px;height:44px;border:0;background:transparent;font-size:28px;line-height:1;color:#1d2a4b;cursor:pointer;border-radius:50%;z-index:1}",
     ".rgf-pop-x:hover,.rgf-pop-x:focus-visible{background:rgba(29,42,75,.08);outline:none}",
-    ".rgf-pop-logo{width:200px;max-width:70%;height:auto}",
-    ".rgf-pop-kicker{margin:18px 0 0;font-family:Montserrat,sans-serif;font-weight:700;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#1d2a4b}",
-    ".rgf-pop-title{margin:8px 0 0;font-weight:800;font-size:clamp(26px,7vw,36px);line-height:1.08;text-transform:uppercase;color:#a07e46}",
-    ".rgf-pop-rule{width:120px;height:2px;margin:16px auto;background:linear-gradient(90deg,transparent,#c9a45c,transparent)}",
-    ".rgf-pop-hon{margin:0;font-style:italic;font-weight:500;font-size:17px;color:#8a6a35}",
-    ".rgf-pop-who{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px}",
-    ".rgf-pop-photo{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #c9a45c;flex:none}",
-    ".rgf-pop-name{margin:0;font-weight:800;font-size:32px;letter-spacing:.04em;color:#1d2a4b}",
-    ".rgf-pop-when{margin:16px 0 0;font-family:Montserrat,sans-serif;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#1d2a4b}",
-    ".rgf-pop-venue{margin:4px 0 0;font-weight:700;font-size:17px;color:#1d2a4b}",
-    ".rgf-pop-stay{margin:14px 0 0;font-style:italic;font-size:15px;color:#5d5a52}",
-    ".rgf-pop-cta{display:inline-block;margin-top:22px;padding:13px 28px;border-radius:999px;background:#1d2a4b;color:#fbf5e9;font-family:Montserrat,sans-serif;font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;box-shadow:0 8px 20px rgba(29,42,75,.3)}",
-    ".rgf-pop-cta:hover,.rgf-pop-cta:focus-visible{filter:brightness(1.08);outline:none}",
-    ".rgf-pop-later{display:block;min-height:44px;padding:0 16px;margin:6px auto 0;border:0;background:none;font-family:Montserrat,sans-serif;font-weight:600;font-size:12px;letter-spacing:.08em;color:#5d5a52;cursor:pointer;text-decoration:underline}"
+    ".rgf-pop-logo{display:block;width:230px;max-width:70%;height:auto;margin:0 auto}",
+    ".rgf-pop-kicker{margin-top:20px!important;font-family:Montserrat,sans-serif;font-weight:700;font-size:min(12px,3cqw);white-space:nowrap;letter-spacing:.28em;padding-left:.28em;text-transform:uppercase;color:#1d2a4b}",
+    ".rgf-pop-title{margin-top:8px!important;font-weight:800;font-size:min(38px,5.6cqw);line-height:1.1;white-space:nowrap;text-transform:uppercase;color:#a07e46}",
+    ".rgf-pop-rule{width:140px;height:2px;margin:16px auto;background:linear-gradient(90deg,transparent,#c9a45c,transparent)}",
+    ".rgf-pop-hon{font-style:italic;font-weight:500;font-size:18px;color:#8a6a35}",
+    ".rgf-pop-photo{display:block;width:132px;height:132px;margin:14px auto 0;border-radius:50%;object-fit:cover;border:4px solid #c9a45c;box-shadow:0 10px 24px rgba(29,42,75,.2)}",
+    ".rgf-pop-name{margin-top:14px!important;font-weight:800;font-size:min(46px,10cqw);line-height:1.05;letter-spacing:.04em;padding-left:.04em;color:#1d2a4b}",
+    ".rgf-pop-award{margin-top:4px!important;font-style:italic;font-size:15px;color:#5d5a52}",
+    ".rgf-pop-host{margin-top:2px!important;font-style:italic;font-weight:500;font-size:16px;color:#8a6a35}",
+    ".rgf-pop-when{margin:20px auto 0;padding:16px 0;max-width:460px;border-top:1px solid rgba(160,126,70,.45);border-bottom:1px solid rgba(160,126,70,.45)}",
+    ".rgf-pop-date{font-family:Montserrat,sans-serif;font-weight:700;font-size:min(16px,4.2cqw);letter-spacing:.08em;padding-left:.08em;text-transform:uppercase;color:#1d2a4b}",
+    ".rgf-pop-venue{margin-top:6px!important;font-weight:700;font-size:19px;color:#1d2a4b}",
+    ".rgf-pop-times{display:flex;justify-content:center;margin-top:12px}",
+    ".rgf-pop-times div{flex:1 1 0;max-width:180px;padding:0 10px}",
+    ".rgf-pop-times div+div{border-left:1px solid rgba(160,126,70,.6)}",
+    ".rgf-pop-times b{display:block;font-size:20px;font-weight:700;color:#a07e46}",
+    ".rgf-pop-times span{font-size:14px;color:#2b2f3a}",
+    ".rgf-pop-mission{margin:18px auto 0!important;max-width:470px;font-size:15px;line-height:1.5;text-wrap:balance}",
+    ".rgf-pop-mission strong{color:#1d2a4b}",
+    ".rgf-pop-stay{margin:14px auto 0!important;max-width:470px;font-style:italic;font-weight:500;font-size:18px;line-height:1.35;color:#8a6a35;text-wrap:balance}",
+    ".rgf-pop-rsvp{margin:18px auto 0;max-width:330px;padding:14px 16px;border:2px solid #c9a45c;border-radius:14px;background:rgba(255,255,255,.45)}",
+    ".rgf-pop-rsvp-label{font-family:Montserrat,sans-serif;font-weight:700;font-size:12px;letter-spacing:.28em;padding-left:.28em;color:#8a6a35}",
+    ".rgf-pop-rsvp a{display:inline-block;margin-top:6px;font-size:16px;font-weight:700;color:#1d2a4b;text-decoration:none;word-break:break-word}",
+    ".rgf-pop-rsvp a:hover{text-decoration:underline}",
+    ".rgf-pop-only{margin-top:4px!important;font-style:italic;font-size:14px;color:#5d5a52}",
+    ".rgf-pop-continue{display:block;min-height:44px;margin:20px auto 0;padding:0 28px;border:0;border-radius:999px;background:#1d2a4b;color:#fbf5e9;font-family:Montserrat,sans-serif;font-weight:700;font-size:12px;letter-spacing:.2em;text-indent:.2em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 20px rgba(29,42,75,.3)}",
+    ".rgf-pop-continue:hover,.rgf-pop-continue:focus-visible{filter:brightness(1.15);outline:none}"
   ].join("");
   document.head.appendChild(css);
 
@@ -54,18 +71,34 @@
   overlay.className = "rgf-pop-overlay";
   overlay.innerHTML =
     '<div class="rgf-pop" role="dialog" aria-modal="true" aria-labelledby="rgf-pop-title">' +
-      '<button class="rgf-pop-x" type="button" aria-label="Close">&times;</button>' +
+    '<div class="rgf-pop-frame">' +
+      '<div class="rgf-pop-xwrap"><button class="rgf-pop-x" type="button" aria-label="Close">&times;</button></div>' +
       '<img class="rgf-pop-logo" src="' + LOGO_URL + '" alt="Ryan Gordy Foundation">' +
       '<p class="rgf-pop-kicker">Announcing our Toronto debut</p>' +
       '<p class="rgf-pop-title" id="rgf-pop-title">The Power of Love Gala</p>' +
       '<div class="rgf-pop-rule"></div>' +
       '<p class="rgf-pop-hon">An Evening Honouring</p>' +
-      '<div class="rgf-pop-who"><img class="rgf-pop-photo" src="' + PHOTO_URL + '" alt=""><p class="rgf-pop-name">WES HALL</p></div>' +
-      '<p class="rgf-pop-when">Saturday, November 7, 2026</p>' +
-      '<p class="rgf-pop-venue">The Ritz-Carlton, Toronto</p>' +
+      '<img class="rgf-pop-photo" src="' + PHOTO_URL + '" alt="Wes Hall">' +
+      '<p class="rgf-pop-name">WES HALL</p>' +
+      '<p class="rgf-pop-award">Honoured with the Power of Love Award</p>' +
+      '<p class="rgf-pop-host">Hosted by Ben Mulroney</p>' +
+      '<div class="rgf-pop-when">' +
+        '<p class="rgf-pop-date">Saturday, November 7, 2026</p>' +
+        '<p class="rgf-pop-venue">The Ritz-Carlton, Toronto</p>' +
+        '<div class="rgf-pop-times">' +
+          '<div><b>6:00 PM</b><span>Cocktails</span></div>' +
+          '<div><b>7:00 PM</b><span>Dinner &amp; Celebration</span></div>' +
+        '</div>' +
+      '</div>' +
+      '<p class="rgf-pop-mission">In loving memory of <strong>Ryan Gordy</strong>, supporting young adults impacted by cancer, in partnership with <strong>Princess Margaret Cancer Centre’s AYA Oncology Program</strong>.</p>' +
       '<p class="rgf-pop-stay">All funds raised in Toronto stay in the Toronto community.</p>' +
-      '<a class="rgf-pop-cta" href="' + PAGE_URL + '">See the announcement</a>' +
-      '<button class="rgf-pop-later" type="button">Maybe later</button>' +
+      '<div class="rgf-pop-rsvp">' +
+        '<p class="rgf-pop-rsvp-label">VIP RSVP</p>' +
+        '<a href="mailto:Anita@ryangordyfoundation.org?subject=Power%20of%20Love%20Gala%20Toronto%20RSVP">Anita@ryangordyfoundation.org</a>' +
+        '<p class="rgf-pop-only">By invitation only</p>' +
+      '</div>' +
+      '<button class="rgf-pop-continue" type="button">Continue to site</button>' +
+    '</div>' +
     '</div>';
 
   function close() {
@@ -78,11 +111,7 @@
 
   overlay.addEventListener("click", function (e) { if (e.target === overlay) close(); });
   overlay.querySelector(".rgf-pop-x").addEventListener("click", close);
-  overlay.querySelector(".rgf-pop-later").addEventListener("click", close);
-  // Going to the announcement also counts as "seen"
-  overlay.querySelector(".rgf-pop-cta").addEventListener("click", function () {
-    try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
-  });
+  overlay.querySelector(".rgf-pop-continue").addEventListener("click", close);
   document.addEventListener("keydown", onKey);
 
   function show() {
