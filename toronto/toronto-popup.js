@@ -14,6 +14,24 @@
   var LOGO_URL = "/toronto/rgf-logo.png";
   var PHOTO_URL = "/toronto/wes-hall.jpg";
   var KEY = "rgfTorontoPopupClosed";
+  var ORN = '<svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 22V9Q3 3 9 3H22"/><path d="M9 6.5L11.5 9 9 11.5 6.5 9Z" fill="currentColor" stroke="none"/></svg>';
+  // Original Toronto skyline drawing (same as the /toronto page), in gold
+  var SKY =
+    '<svg viewBox="0 0 1200 220" preserveAspectRatio="xMidYMax meet" aria-hidden="true">' +
+    '<defs><linearGradient id="rgfPopSky" x1="0" y1="0" x2="0" y2="1">' +
+    '<stop offset="0" stop-color="#e2c27a" stop-opacity=".35"/><stop offset="1" stop-color="#a07e46" stop-opacity=".75"/>' +
+    '</linearGradient></defs>' +
+    '<g fill="url(#rgfPopSky)">' +
+    '<rect x="0" y="170" width="1200" height="50"/><rect x="40" y="150" width="50" height="70"/><rect x="95" y="128" width="38" height="92"/>' +
+    '<rect x="138" y="140" width="56" height="80"/><rect x="200" y="112" width="34" height="108"/><rect x="240" y="132" width="46" height="88"/>' +
+    '<path d="M300 180 Q360 128 420 180 Z"/>' +
+    '<path d="M462 220 L468 92 L474 92 L480 220 Z"/><rect x="456" y="84" width="30" height="10" rx="4"/><ellipse cx="471" cy="80" rx="11" ry="7"/><rect x="469.5" y="6" width="3" height="76"/>' +
+    '<rect x="500" y="122" width="44" height="98"/><rect x="550" y="96" width="36" height="124"/><rect x="592" y="70" width="40" height="150"/>' +
+    '<rect x="638" y="108" width="34" height="112"/><rect x="678" y="60" width="42" height="160"/><rect x="726" y="88" width="38" height="132"/>' +
+    '<rect x="770" y="118" width="50" height="102"/><rect x="826" y="80" width="34" height="140"/><rect x="866" y="132" width="48" height="88"/>' +
+    '<rect x="920" y="104" width="40" height="116"/><rect x="966" y="142" width="54" height="78"/><rect x="1026" y="122" width="36" height="98"/>' +
+    '<rect x="1068" y="150" width="60" height="70"/><rect x="1134" y="136" width="40" height="84"/>' +
+    '</g><path d="M0 170H1200" stroke="#c9a45c" stroke-width="2"/></svg>';
 
   // Don't show on the announcement page itself
   if (location.pathname.indexOf("/toronto") === 0) return;
@@ -28,12 +46,21 @@
   // after the last letter doesn't pull them off-centre.
   var css = document.createElement("style");
   css.textContent = [
-    ".rgf-pop-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(17,22,38,.62);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transition:opacity .45s ease,-webkit-backdrop-filter .8s ease,backdrop-filter .8s ease}",
+    ".rgf-pop-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(12,18,38,.78);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transition:opacity .45s ease,-webkit-backdrop-filter .8s ease,backdrop-filter .8s ease}",
     ".rgf-pop-overlay.rgf-in{opacity:1;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}",
     ".rgf-pop-overlay.rgf-out{opacity:0;transition:opacity .3s ease}",
     ".rgf-pop{position:relative;width:100%;max-width:620px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:radial-gradient(ellipse at 50% 30%,#fffaf0,#fbf5e9 50%,#f3e8d2);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;opacity:0}",
     ".rgf-pop-overlay.rgf-in .rgf-pop{animation:rgfCard .9s cubic-bezier(.16,1,.3,1) .05s both}",
-    ".rgf-pop-frame{position:relative;margin:8px;border:1px solid rgba(201,164,92,.55);border-radius:10px;padding:36px 24px 28px;container-type:inline-size}",
+    ".rgf-pop-frame{position:relative;margin:8px;border:1px solid rgba(201,164,92,.8);border-radius:10px;padding:36px 24px 28px;container-type:inline-size}",
+    // Hotel-style double rule: a second, finer gold line just inside the border
+    ".rgf-pop-frame::before{content:'';position:absolute;inset:5px;border:1px solid rgba(201,164,92,.45);border-radius:6px;pointer-events:none}",
+    // Small gold corner ornaments sitting on the double rule
+    ".rgf-pop-orn{position:absolute;z-index:1;width:34px;height:34px;pointer-events:none;color:#b08d50}",
+    ".rgf-pop-orn.tl{top:-1px;left:-1px}.rgf-pop-orn.tr{top:-1px;right:-1px;transform:scaleX(-1)}",
+    ".rgf-pop-orn.bl{bottom:-1px;left:-1px;transform:scaleY(-1)}.rgf-pop-orn.br{bottom:-1px;right:-1px;transform:scale(-1)}",
+    // Toronto skyline in gold along the bottom of the card, just inside the inner rule
+    ".rgf-pop-sky{margin:22px -18px -22px;border-radius:0 0 5px 5px;overflow:hidden;line-height:0}",
+    ".rgf-pop-sky svg{display:block;width:100%;height:auto}",
     ".rgf-pop p{margin:0}",
     ".rgf-pop-xwrap{position:sticky;top:0;height:0;z-index:2}",
     ".rgf-pop-x{position:absolute;top:-28px;right:-16px;width:44px;height:44px;border:0;background:transparent;font-size:28px;line-height:1;color:#1d2a4b;cursor:pointer;border-radius:50%;z-index:1}",
@@ -72,13 +99,18 @@
     "@keyframes rgfPhoto{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}",
     "@keyframes rgfGlow{0%,100%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 0 rgba(201,164,92,0)}50%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 10px rgba(201,164,92,.28)}}",
     "@keyframes rgfShine{from{background-position:100% 0}to{background-position:0 0}}",
+    "@keyframes rgfWipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}",
+    "@keyframes rgfFade{from{opacity:0}to{opacity:1}}",
     "@keyframes rgfFrame{from{border-color:rgba(201,164,92,0)}to{border-color:rgba(201,164,92,.55)}}",
     ".rgf-in .rgf-pop-frame{animation:rgfFrame 1.2s ease .4s both}",
-    ".rgf-in .rgf-pop-frame>*{animation:rgfUp .7s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(.35s + var(--i) * 60ms)}",
+    ".rgf-in .rgf-pop-frame>:not(.rgf-pop-orn){animation:rgfUp .7s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(.35s + var(--i) * 60ms)}",
+    ".rgf-in .rgf-pop-orn{animation:rgfFade 1s ease .7s both}",
+    ".rgf-in .rgf-pop-frame::before{animation:rgfFade 1.2s ease .5s both}",
+    ".rgf-in .rgf-pop-sky svg{animation:rgfWipe 1.6s cubic-bezier(.65,0,.35,1) 1.1s both}",
     ".rgf-in .rgf-pop-frame>.rgf-pop-rule{animation-name:rgfDraw;animation-duration:.9s}",
     ".rgf-in .rgf-pop-frame>.rgf-pop-photo{animation:rgfPhoto .8s cubic-bezier(.34,1.56,.64,1) both,rgfGlow 1.4s ease-in-out both;animation-delay:calc(.35s + var(--i) * 60ms),1.3s}",
     ".rgf-in .rgf-pop-frame>.rgf-pop-title{animation:rgfUp .7s cubic-bezier(.16,1,.3,1) both,rgfShine 1.6s ease-in-out both;animation-delay:calc(.35s + var(--i) * 60ms),1s}",
-    "@media (prefers-reduced-motion:reduce){.rgf-pop-overlay,.rgf-pop-overlay.rgf-in{transition:opacity .2s;-webkit-backdrop-filter:none;backdrop-filter:none}.rgf-in .rgf-pop,.rgf-in .rgf-pop-frame,.rgf-in .rgf-pop-frame>*{animation:none!important;opacity:1}}"
+    "@media (prefers-reduced-motion:reduce){.rgf-pop-overlay,.rgf-pop-overlay.rgf-in{transition:opacity .2s;-webkit-backdrop-filter:none;backdrop-filter:none}.rgf-in .rgf-pop,.rgf-in .rgf-pop-frame,.rgf-in .rgf-pop-frame>*,.rgf-in .rgf-pop-frame::before,.rgf-in .rgf-pop-sky svg{animation:none!important;opacity:1}}"
   ].join("");
   document.head.appendChild(css);
 
@@ -87,6 +119,7 @@
   overlay.innerHTML =
     '<div class="rgf-pop" role="dialog" aria-modal="true" aria-labelledby="rgf-pop-title">' +
     '<div class="rgf-pop-frame">' +
+      ['tl', 'tr', 'bl', 'br'].map(function (c) { return '<span class="rgf-pop-orn ' + c + '" aria-hidden="true">' + ORN + '</span>'; }).join("") +
       '<div class="rgf-pop-xwrap"><button class="rgf-pop-x" type="button" aria-label="Close">&times;</button></div>' +
       '<img class="rgf-pop-logo" src="' + LOGO_URL + '" alt="Ryan Gordy Foundation">' +
       '<p class="rgf-pop-kicker">Announcing our Toronto debut</p>' +
@@ -113,11 +146,14 @@
         '<p class="rgf-pop-only">By invitation only</p>' +
       '</div>' +
       '<button class="rgf-pop-continue" type="button">Continue to site</button>' +
+      '<div class="rgf-pop-sky">' + SKY + '</div>' +
     '</div>' +
     '</div>';
 
   var kids = overlay.querySelector(".rgf-pop-frame").children;
-  for (var i = 0; i < kids.length; i++) kids[i].style.setProperty("--i", i);
+  for (var i = 0, n = 0; i < kids.length; i++) {
+    if (!kids[i].classList.contains("rgf-pop-orn")) kids[i].style.setProperty("--i", n++);
+  }
 
   function close() {
     try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
