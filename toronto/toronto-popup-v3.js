@@ -15,12 +15,13 @@
   var PHOTO_URL = "/toronto/wes-hall.jpg";
   var KEY = "rgfTorontoPopupClosedV3";
   var BG_URL = "/toronto/ritz-toronto-bg.jpg";
-  // Bokeh, modelled on the reference video: out-of-focus discs (and a few pinpoint
-  // sparkles) fade in where they are, hold, fade out, then reappear somewhere else.
+  // Bokeh, measured from the reference video: out-of-focus discs (and a few pinpoint
+  // sparkles) float in front of everything, glide mostly sideways (~5% of the card
+  // width per second) while fading in and out, then reappear somewhere else.
   // Most land over the building on the left and near the bottom.
   // [size in % of card width, seconds per cycle, start offset seconds]
-  var ORBS = [[9,4.6,0],[7,5.2,1.1],[10,4.2,2.3],[6,5.8,0.6],[8,4.9,3.0],[9.5,5.5,1.8],[6.5,4.4,3.7],[8.5,6.0,2.9],[7.5,5.0,4.2],[9,4.8,1.4]];
-  var SPARKS = [[1.2,3.2,0.4],[1,2.8,1.6],[1.4,3.6,2.4],[1,3,0.9]];
+  var ORBS = [[9,3.2,0],[7,3.6,1.1],[10,2.9,2.3],[6,3.9,0.6],[8,3.4,3.0],[9.5,3.7,1.8],[6.5,3.1,3.7],[8.5,4.0,2.9],[7.5,3.3,4.2],[9,3.5,1.4]];
+  var SPARKS = [[1.2,2.6,0.4],[1,2.4,1.6],[1.4,2.9,2.4],[1,2.5,0.9]];
   function spot() {
     var r = Math.random(), x;
     if (r < 0.5) x = 2 + Math.random() * 26;        // left, over the building
@@ -51,7 +52,7 @@
     ".rgf-pop-frame{position:relative;margin:8px;border:1px solid rgba(201,164,92,.55);border-radius:10px;padding:5.5cqw 4cqw 3.8cqw;container-type:inline-size}",
     ".rgf-pop p{margin:0}",
     ".rgf-pop-frame>*{position:relative;z-index:1}",
-    ".rgf-pop-bokeh{position:absolute!important;z-index:0!important;inset:-9px;overflow:hidden;border-radius:14px;pointer-events:none}",
+    ".rgf-pop-bokeh{position:absolute!important;z-index:2!important;mix-blend-mode:screen;inset:-9px;overflow:hidden;border-radius:14px;pointer-events:none}",
     ".rgf-pop-bokeh span{position:absolute;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);opacity:0;animation:rgfTwinkle var(--d) ease-in-out var(--o) infinite}",
     ".rgf-pop-orb{background:radial-gradient(circle,rgba(255,255,255,.78) 0 56%,rgba(255,255,255,.98) 66%,rgba(255,255,255,0) 71%);filter:blur(1.5px);box-shadow:0 0 18px rgba(255,255,255,.35)}",
     ".rgf-pop-spark{background:radial-gradient(circle,#fff 0 30%,rgba(255,255,255,0) 70%)}",
@@ -86,7 +87,7 @@
     ".rgf-pop-only{margin-top:.6cqw!important;font-style:italic;font-size:max(10.5px,2.35cqw);color:#5d5a52}",
     ".rgf-pop-continue{display:block;min-height:max(36px,7.5cqw);margin:3.5cqw auto 0;padding:0 6cqw;border:0;border-radius:999px;background:#1d2a4b;color:#fbf5e9;font-family:Montserrat,sans-serif;font-weight:700;font-size:max(9.5px,2cqw);letter-spacing:.2em;text-indent:.2em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 20px rgba(29,42,75,.3)}",
     ".rgf-pop-continue:hover,.rgf-pop-continue:focus-visible{filter:brightness(1.15);outline:none}",
-    "@container (max-width:420px){.rgf-pop-mission,.rgf-pop-stay{max-width:none}}",
+    "@container (max-width:360px){.rgf-pop-mission,.rgf-pop-stay{max-width:none}}",
     // Reveal: card rises in, then each line follows in turn (--i is set per child below)
     "@keyframes rgfCard{from{opacity:0;transform:translateY(48px) scale(.92)}to{opacity:1;transform:none}}",
     "@keyframes rgfUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}",
@@ -95,7 +96,7 @@
     "@keyframes rgfGlow{0%,100%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 0 rgba(201,164,92,0),0 0 0 0 rgba(255,236,190,0)}50%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 9px rgba(201,164,92,.22),0 0 40px 14px rgba(255,236,190,.45)}}",
     "@keyframes rgfShine{from{background-position:100% 0}to{background-position:0 0}}",
     "@keyframes rgfFade{from{opacity:0}to{opacity:1}}",
-    "@keyframes rgfTwinkle{0%{opacity:0;transform:translate(-50%,-50%) scale(.92)}30%,55%{opacity:.9}85%,100%{opacity:0;transform:translate(-50%,calc(-50% - 6px)) scale(1)}}",
+    "@keyframes rgfTwinkle{0%{opacity:0;transform:translate(-50%,-50%) scale(.92)}25%,60%{opacity:.6}90%,100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1)}}",
     "@keyframes rgfFrame{from{border-color:rgba(201,164,92,0)}to{border-color:rgba(201,164,92,.55)}}",
     ".rgf-in .rgf-pop-frame{animation:rgfFrame 1.8s ease .6s both}",
     ".rgf-in .rgf-pop-frame>*{animation:rgfUp 1.1s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(.6s + var(--i) * 90ms)}",
@@ -106,9 +107,14 @@
   ].join("");
   document.head.appendChild(css);
 
+  function drift() {
+    var dx = (Math.random() < 0.5 ? -1 : 1) * (8 + Math.random() * 10);
+    var dy = (Math.random() - 0.5) * 8;
+    return "--dx:" + dx.toFixed(1) + "cqw;--dy:" + dy.toFixed(1) + "cqw";
+  }
   function dot(cls, b) {
     var p = spot();
-    return '<span class="' + cls + '" style="left:' + p[0] + '%;top:' + p[1] + ';width:' + b[0] + 'cqw;--d:' + b[1] + 's;--o:' + b[2] + 's"></span>';
+    return '<span class="' + cls + '" style="left:' + p[0] + '%;top:' + p[1] + ';width:' + b[0] + 'cqw;--d:' + b[1] + 's;--o:' + b[2] + 's;' + drift() + '"></span>';
   }
 
   var overlay = document.createElement("div");
@@ -159,6 +165,9 @@
     var p = spot();
     e.target.style.left = p[0] + "%";
     e.target.style.top = p[1];
+    var d = drift().split(";");
+    e.target.style.setProperty("--dx", d[0].split(":")[1]);
+    e.target.style.setProperty("--dy", d[1].split(":")[1]);
   });
 
   function close() {
