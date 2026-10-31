@@ -15,7 +15,9 @@
   var PHOTO_URL = "/toronto/wes-hall.jpg";
   var KEY = "rgfTorontoPopupClosed";
   var ORN = '<svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 22V9Q3 3 9 3H22"/><path d="M9 6.5L11.5 9 9 11.5 6.5 9Z" fill="currentColor" stroke="none"/></svg>';
-  // Original Toronto skyline drawing (same as the /toronto page), in gold
+  // Original Toronto skyline drawing (same as the /toronto page), in gold.
+  // The Ritz-Carlton tower (Wellington St, just east of the CN Tower) is drawn
+  // solid and labelled.
   var SKY =
     '<svg viewBox="0 0 1200 220" preserveAspectRatio="xMidYMax meet" aria-hidden="true">' +
     '<defs><linearGradient id="rgfPopSky" x1="0" y1="0" x2="0" y2="1">' +
@@ -26,12 +28,18 @@
     '<rect x="138" y="140" width="56" height="80"/><rect x="200" y="112" width="34" height="108"/><rect x="240" y="132" width="46" height="88"/>' +
     '<path d="M300 180 Q360 128 420 180 Z"/>' +
     '<path d="M462 220 L468 92 L474 92 L480 220 Z"/><rect x="456" y="84" width="30" height="10" rx="4"/><ellipse cx="471" cy="80" rx="11" ry="7"/><rect x="469.5" y="6" width="3" height="76"/>' +
-    '<rect x="500" y="122" width="44" height="98"/><rect x="550" y="96" width="36" height="124"/><rect x="592" y="70" width="40" height="150"/>' +
+    '<rect x="550" y="96" width="36" height="124"/><rect x="592" y="70" width="40" height="150"/>' +
     '<rect x="638" y="108" width="34" height="112"/><rect x="678" y="60" width="42" height="160"/><rect x="726" y="88" width="38" height="132"/>' +
     '<rect x="770" y="118" width="50" height="102"/><rect x="826" y="80" width="34" height="140"/><rect x="866" y="132" width="48" height="88"/>' +
     '<rect x="920" y="104" width="40" height="116"/><rect x="966" y="142" width="54" height="78"/><rect x="1026" y="122" width="36" height="98"/>' +
     '<rect x="1068" y="150" width="60" height="70"/><rect x="1134" y="136" width="40" height="84"/>' +
-    '</g><path d="M0 170H1200" stroke="#c9a45c" stroke-width="2"/></svg>';
+    '</g>' +
+    '<path d="M499 220V112L522 96L545 112V220Z" fill="#b8924f"/>' +
+    '<path d="M504 118H540M504 132H540M504 146H540M504 160H540" stroke="#e8cf8f" stroke-width="1.5" opacity=".7"/>' +
+    '<path d="M522 86V58" stroke="#a07e46" stroke-width="1.5"/>' +
+    '<path d="M522 76L525 84L533 87L525 90L522 98L519 90L511 87L519 84Z" fill="#a07e46" transform="translate(0 -20)"/>' +
+    '<text x="534" y="52" font-family="Montserrat,sans-serif" font-weight="700" font-size="34" letter-spacing="5" fill="#8a6a35">THE RITZ-CARLTON</text>' +
+    '<path d="M0 170H1200" stroke="#c9a45c" stroke-width="2"/></svg>';
 
   // Don't show on the announcement page itself
   if (location.pathname.indexOf("/toronto") === 0) return;
