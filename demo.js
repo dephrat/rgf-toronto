@@ -36,7 +36,9 @@
   var bar = document.createElement("div");
   bar.className = "demo-switch";
   bar.innerHTML = "<span>Popup version</span>" + Object.keys(VERSIONS).map(function (k) {
-    return '<a href="/?v=' + k + '"' + (k === v ? ' aria-current="true"' : "") + ">" + VERSIONS[k].label + "</a>";
+    var parts = VERSIONS[k].label.split(" ");   // "V4 Matched" -> short "V4" + long " Matched"
+    return '<a href="/?v=' + k + '"' + (k === v ? ' aria-current="true"' : "") + ">" + parts[0] +
+      '<span class="long"> ' + parts.slice(1).join(" ") + "</span></a>";
   }).join("");
   document.body.appendChild(bar);
 })();
