@@ -16,7 +16,7 @@
   var KEY = "rgfTorontoPopupClosedV3";
   var BG_URL = "/toronto/ritz-toronto-bg.jpg";
   // Soft out-of-focus lights drifting over the photo: [left %, top %, size px, drift seconds]
-  var BOKEH = [[8,14,90,19],[78,8,60,23],[88,34,120,27],[14,46,70,21],[62,58,46,17],[4,74,130,29],[84,70,80,24],[40,88,100,26],[24,24,40,15],[58,20,70,22]];
+  var BOKEH = [[6,12,46,19],[82,6,30,23],[90,30,58,27],[10,40,36,21],[70,52,24,17],[4,70,64,29],[86,66,40,24],[30,90,52,26],[22,22,20,15],[60,16,34,22],[94,86,28,20],[16,58,26,18],[50,96,40,25],[76,92,22,16]];
 
   // Don't show on the announcement page itself
   if (location.pathname.indexOf("/toronto") === 0) return;
@@ -34,13 +34,13 @@
     ".rgf-pop-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(17,22,38,.62);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transition:opacity .9s ease,-webkit-backdrop-filter 1.4s ease,backdrop-filter 1.4s ease}",
     ".rgf-pop-overlay.rgf-in{opacity:1;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}",
     ".rgf-pop-overlay.rgf-out{opacity:0;transition:opacity .4s ease}",
-    ".rgf-pop{position:relative;width:100%;max-width:620px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:linear-gradient(180deg,rgba(253,248,238,.95) 0%,rgba(253,248,238,.82) 20%,rgba(253,248,238,.6) 42%,rgba(253,248,238,.7) 68%,rgba(253,248,238,.82) 100%),url("+BG_URL+") 30% 50%/cover no-repeat,radial-gradient(ellipse at 50% 30%,#fffaf0,#fbf5e9 50%,#f3e8d2);background-attachment:local;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;opacity:0}",
+    ".rgf-pop{position:relative;width:100%;max-width:620px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:radial-gradient(ellipse 60% 55% at 50% 50%,rgba(253,249,240,.72),rgba(253,249,240,.35) 70%,rgba(253,249,240,.12)),linear-gradient(180deg,rgba(253,249,240,.7),rgba(253,249,240,0) 22%),url("+BG_URL+") 50% 0/100% auto no-repeat,#f5e9dd;background-attachment:local;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;opacity:0}",
     ".rgf-pop-overlay.rgf-in .rgf-pop{animation:rgfCard 1.5s cubic-bezier(.16,1,.3,1) .1s both}",
     ".rgf-pop-frame{position:relative;margin:8px;border:1px solid rgba(201,164,92,.55);border-radius:10px;padding:36px 24px 28px;container-type:inline-size}",
     ".rgf-pop p{margin:0}",
     ".rgf-pop-frame>*{position:relative;z-index:1}",
     ".rgf-pop-bokeh{position:absolute!important;z-index:0!important;inset:-9px;overflow:hidden;border-radius:14px;pointer-events:none}",
-    ".rgf-pop-bokeh span{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,240,205,.75) 0 38%,rgba(222,188,118,.28) 56%,rgba(222,188,118,0) 70%);opacity:0;animation:rgfFloat var(--d) ease-in-out infinite alternate;animation-delay:calc(var(--d) * -.5)}",
+    ".rgf-pop-bokeh span{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9) 0 40%,rgba(255,250,236,.45) 56%,rgba(255,250,236,0) 70%);filter:blur(1px);opacity:0;animation:rgfFloat var(--d) ease-in-out infinite alternate;animation-delay:calc(var(--d) * -.5)}",
     ".rgf-in .rgf-pop-bokeh{animation:rgfFade 3s ease 1.6s both}",
     ".rgf-pop-xwrap{position:sticky;top:0;height:0;z-index:2}",
     ".rgf-pop-x{position:absolute;top:-28px;right:-16px;width:44px;height:44px;border:0;background:transparent;font-size:28px;line-height:1;color:#1d2a4b;cursor:pointer;border-radius:50%;z-index:1}",
@@ -80,7 +80,7 @@
     "@keyframes rgfGlow{0%,100%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 0 rgba(201,164,92,0),0 0 0 0 rgba(255,236,190,0)}50%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 9px rgba(201,164,92,.22),0 0 40px 14px rgba(255,236,190,.45)}}",
     "@keyframes rgfShine{from{background-position:100% 0}to{background-position:0 0}}",
     "@keyframes rgfFade{from{opacity:0}to{opacity:1}}",
-    "@keyframes rgfFloat{0%{opacity:.25;transform:translate(0,0) scale(.9)}50%{opacity:.6}100%{opacity:.3;transform:translate(14px,-36px) scale(1.12)}}",
+    "@keyframes rgfFloat{0%{opacity:.3;transform:translate(0,0) scale(.9)}50%{opacity:.85}100%{opacity:.35;transform:translate(14px,-40px) scale(1.12)}}",
     "@keyframes rgfFrame{from{border-color:rgba(201,164,92,0)}to{border-color:rgba(201,164,92,.55)}}",
     ".rgf-in .rgf-pop-frame{animation:rgfFrame 1.8s ease .6s both}",
     ".rgf-in .rgf-pop-frame>*{animation:rgfUp 1.1s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(.6s + var(--i) * 90ms)}",
