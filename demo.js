@@ -1,14 +1,16 @@
 /*
  * Demo site only (not part of the client install): picks which popup version
  * to show and draws a small version switch in the corner.
- *   ?v=original  the popup before the skyline and hotel frame
- *   ?v=skyline   the current popup (default)
+ *   ?v=original  v1: the popup before the skyline and hotel frame
+ *   ?v=skyline   v2: gold skyline, Ritz tower and hotel frame
+ *   ?v=v3        v3: Ritz-Carlton / Toronto photo, bokeh, slower reveal (default)
  * Opening a link with ?v= always shows that popup again.
  */
 (function () {
   var VERSIONS = {
-    original: { src: "/toronto/toronto-popup-original.js", label: "Original" },
-    skyline: { src: "/toronto/toronto-popup.js", label: "Toronto + Ritz" }
+    original: { src: "/toronto/toronto-popup-original.js", label: "V1 Original" },
+    skyline: { src: "/toronto/toronto-popup.js", label: "V2 Skyline" },
+    v3: { src: "/toronto/toronto-popup-v3.js", label: "V3 Photo" }
   };
   var params = new URLSearchParams(location.search);
   var v = params.get("v");
@@ -17,11 +19,12 @@
       sessionStorage.setItem("rgfDemoVersion", v);
       sessionStorage.removeItem("rgfTorontoPopupClosed");
       sessionStorage.removeItem("rgfTorontoPopupClosedOriginal");
+      sessionStorage.removeItem("rgfTorontoPopupClosedV3");
     } else {
       v = sessionStorage.getItem("rgfDemoVersion");
     }
   } catch (e) {}
-  if (!VERSIONS[v]) v = "skyline";
+  if (!VERSIONS[v]) v = "v3";
 
   var s = document.createElement("script");
   s.src = VERSIONS[v].src;
