@@ -3,14 +3,16 @@
  * to show and draws a small version switch in the corner.
  *   ?v=original  v1: the popup before the skyline and hotel frame
  *   ?v=skyline   v2: gold skyline, Ritz tower and hotel frame
- *   ?v=v3        v3: Ritz-Carlton / Toronto photo, bokeh, slower reveal (default)
+ *   ?v=v3        v3: Ritz-Carlton / Toronto photo, bokeh, slower reveal
+ *   ?v=v4        v4: v3 matched to the reference video (default)
  * Opening a link with ?v= always shows that popup again.
  */
 (function () {
   var VERSIONS = {
     original: { src: "/toronto/toronto-popup-original.js", label: "V1 Original" },
     skyline: { src: "/toronto/toronto-popup.js", label: "V2 Skyline" },
-    v3: { src: "/toronto/toronto-popup-v3.js", label: "V3 Photo" }
+    v3: { src: "/toronto/toronto-popup-v3.js", label: "V3 Photo" },
+    v4: { src: "/toronto/toronto-popup-v4.js", label: "V4 Matched" }
   };
   var params = new URLSearchParams(location.search);
   var v = params.get("v");
@@ -20,11 +22,12 @@
       sessionStorage.removeItem("rgfTorontoPopupClosed");
       sessionStorage.removeItem("rgfTorontoPopupClosedOriginal");
       sessionStorage.removeItem("rgfTorontoPopupClosedV3");
+      sessionStorage.removeItem("rgfTorontoPopupClosedV4");
     } else {
       v = sessionStorage.getItem("rgfDemoVersion");
     }
   } catch (e) {}
-  if (!VERSIONS[v]) v = "v3";
+  if (!VERSIONS[v]) v = "v4";
 
   var s = document.createElement("script");
   s.src = VERSIONS[v].src;
