@@ -15,8 +15,20 @@
   var PHOTO_URL = "/toronto/wes-hall.jpg";
   var KEY = "rgfTorontoPopupClosedV3";
   var BG_URL = "/toronto/ritz-toronto-bg.jpg";
-  // Soft out-of-focus lights drifting over the photo: [left %, top %, size px, drift seconds]
-  var BOKEH = [[6,12,46,19],[82,6,30,23],[90,30,58,27],[10,40,36,21],[70,52,24,17],[4,70,64,29],[86,66,40,24],[30,90,52,26],[22,22,20,15],[60,16,34,22],[94,86,28,20],[16,58,26,18],[50,96,40,25],[76,92,22,16]];
+  // Bokeh, modelled on the reference video: out-of-focus discs (and a few pinpoint
+  // sparkles) fade in where they are, hold, fade out, then reappear somewhere else.
+  // Most land over the building on the left and near the bottom.
+  // [size in % of card width, seconds per cycle, start offset seconds]
+  var ORBS = [[9,4.6,0],[7,5.2,1.1],[10,4.2,2.3],[6,5.8,0.6],[8,4.9,3.0],[9.5,5.5,1.8],[6.5,4.4,3.7],[8.5,6.0,2.9],[7.5,5.0,4.2],[9,4.8,1.4]];
+  var SPARKS = [[1.2,3.2,0.4],[1,2.8,1.6],[1.4,3.6,2.4],[1,3,0.9]];
+  function spot() {
+    var r = Math.random(), x;
+    if (r < 0.5) x = 2 + Math.random() * 26;        // left, over the building
+    else if (r < 0.75) x = 70 + Math.random() * 25; // right edge
+    else x = 28 + Math.random() * 42;               // middle
+    if (Math.random() < 0.25) return [x, "calc(100% - " + (4 + Math.random() * 30).toFixed(1) + "cqw)"];
+    return [x, (12 + Math.random() * 120).toFixed(1) + "cqw"];
+  }
 
   // Don't show on the announcement page itself
   if (location.pathname.indexOf("/toronto") === 0) return;
@@ -40,7 +52,9 @@
     ".rgf-pop p{margin:0}",
     ".rgf-pop-frame>*{position:relative;z-index:1}",
     ".rgf-pop-bokeh{position:absolute!important;z-index:0!important;inset:-9px;overflow:hidden;border-radius:14px;pointer-events:none}",
-    ".rgf-pop-bokeh span{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9) 0 40%,rgba(255,250,236,.45) 56%,rgba(255,250,236,0) 70%);filter:blur(1px);opacity:0;animation:rgfFloat var(--d) ease-in-out infinite alternate;animation-delay:calc(var(--d) * -.5)}",
+    ".rgf-pop-bokeh span{position:absolute;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);opacity:0;animation:rgfTwinkle var(--d) ease-in-out var(--o) infinite}",
+    ".rgf-pop-orb{background:radial-gradient(circle,rgba(255,255,255,.78) 0 56%,rgba(255,255,255,.98) 66%,rgba(255,255,255,0) 71%);filter:blur(1.5px);box-shadow:0 0 18px rgba(255,255,255,.35)}",
+    ".rgf-pop-spark{background:radial-gradient(circle,#fff 0 30%,rgba(255,255,255,0) 70%)}",
     ".rgf-in .rgf-pop-bokeh{animation:rgfFade 3s ease 1.6s both}",
     ".rgf-pop-xwrap{position:sticky;top:0;height:0;z-index:2}",
     ".rgf-pop-x{position:absolute;top:-28px;right:-16px;width:44px;height:44px;border:0;background:transparent;font-size:28px;line-height:1;color:#1d2a4b;cursor:pointer;border-radius:50%;z-index:1}",
@@ -80,7 +94,7 @@
     "@keyframes rgfGlow{0%,100%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 0 rgba(201,164,92,0),0 0 0 0 rgba(255,236,190,0)}50%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 9px rgba(201,164,92,.22),0 0 40px 14px rgba(255,236,190,.45)}}",
     "@keyframes rgfShine{from{background-position:100% 0}to{background-position:0 0}}",
     "@keyframes rgfFade{from{opacity:0}to{opacity:1}}",
-    "@keyframes rgfFloat{0%{opacity:.3;transform:translate(0,0) scale(.9)}50%{opacity:.85}100%{opacity:.35;transform:translate(14px,-40px) scale(1.12)}}",
+    "@keyframes rgfTwinkle{0%{opacity:0;transform:translate(-50%,-50%) scale(.92)}30%,55%{opacity:.9}85%,100%{opacity:0;transform:translate(-50%,calc(-50% - 6px)) scale(1)}}",
     "@keyframes rgfFrame{from{border-color:rgba(201,164,92,0)}to{border-color:rgba(201,164,92,.55)}}",
     ".rgf-in .rgf-pop-frame{animation:rgfFrame 1.8s ease .6s both}",
     ".rgf-in .rgf-pop-frame>*{animation:rgfUp 1.1s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(.6s + var(--i) * 90ms)}",
@@ -91,14 +105,20 @@
   ].join("");
   document.head.appendChild(css);
 
+  function dot(cls, b) {
+    var p = spot();
+    return '<span class="' + cls + '" style="left:' + p[0] + '%;top:' + p[1] + ';width:' + b[0] + 'cqw;--d:' + b[1] + 's;--o:' + b[2] + 's"></span>';
+  }
+
   var overlay = document.createElement("div");
   overlay.className = "rgf-pop-overlay";
   overlay.innerHTML =
     '<div class="rgf-pop" role="dialog" aria-modal="true" aria-labelledby="rgf-pop-title">' +
     '<div class="rgf-pop-frame">' +
-      '<div class="rgf-pop-bokeh" aria-hidden="true">' + BOKEH.map(function (b) {
-        return '<span style="left:' + b[0] + '%;top:' + b[1] + '%;width:' + b[2] + 'px;height:' + b[2] + 'px;--d:' + b[3] + 's"></span>';
-      }).join("") + '</div>' +
+      '<div class="rgf-pop-bokeh" aria-hidden="true">' +
+        ORBS.map(function (b) { return dot("rgf-pop-orb", b); }).join("") +
+        SPARKS.map(function (b) { return dot("rgf-pop-spark", b); }).join("") +
+      '</div>' +
       '<div class="rgf-pop-xwrap"><button class="rgf-pop-x" type="button" aria-label="Close">&times;</button></div>' +
       '<img class="rgf-pop-logo" src="' + LOGO_URL + '" alt="Ryan Gordy Foundation">' +
       '<p class="rgf-pop-kicker">Announcing our Toronto debut</p>' +
@@ -132,6 +152,13 @@
   for (var i = 0, n = 0; i < kids.length; i++) {
     if (!kids[i].classList.contains("rgf-pop-bokeh")) kids[i].style.setProperty("--i", n++);
   }
+
+  // Each time a light finishes fading out, move it to a new spot
+  overlay.querySelector(".rgf-pop-bokeh").addEventListener("animationiteration", function (e) {
+    var p = spot();
+    e.target.style.left = p[0] + "%";
+    e.target.style.top = p[1];
+  });
 
   function close() {
     try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
