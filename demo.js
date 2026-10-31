@@ -30,7 +30,7 @@
   if (!VERSIONS[v]) v = "v4";
 
   var s = document.createElement("script");
-  s.src = VERSIONS[v].src + "?b=20261031b";   // bump with each deploy so phones skip stale cached copies
+  s.src = VERSIONS[v].src + "?b=20261031c";   // bump with each deploy so phones skip stale cached copies
   document.body.appendChild(s);
 
   var bar = document.createElement("div");
@@ -41,4 +41,13 @@
       '<span class="long"> ' + parts.slice(1).join(" ") + "</span></a>";
   }).join("");
   document.body.appendChild(bar);
+
+  // Plain copy in the page under the menu, in case a phone hides the floating bar
+  var row = document.createElement("div");
+  row.className = "demo-row";
+  row.innerHTML = "Popup version: " + Object.keys(VERSIONS).map(function (k) {
+    return '<a href="/?v=' + k + '"' + (k === v ? ' aria-current="true"' : "") + ">" + VERSIONS[k].label + "</a>";
+  }).join("");
+  var header = document.querySelector("header");
+  if (header) header.insertAdjacentElement("afterend", row);
 })();
