@@ -18,17 +18,17 @@
   // Bokeh, measured from the reference video: out-of-focus discs (and a few pinpoint
   // sparkles) float in front of everything, glide mostly sideways (~5% of the card
   // width per second) while fading in and out, then reappear somewhere else.
-  // Most land over the building on the left and near the bottom.
+  // The brightest cluster near the bottom around the RSVP box and button; fainter
+  // ones land over the building on the left. Sizes, speed, lifetime and brightness
+  // were checked by recording this popup and measuring it with the same tracker.
   // [size in % of card width, seconds per cycle, start offset seconds]
-  var ORBS = [[9,3.2,0],[7,3.6,1.1],[10,2.9,2.3],[6,3.9,0.6],[8,3.4,3.0],[9.5,3.7,1.8],[6.5,3.1,3.7],[8.5,4.0,2.9],[7.5,3.3,4.2],[9,3.5,1.4]];
+  var ORBS = [[9.5,2.4,0],[8,2.7,0.8],[10.5,2.2,1.7],[7,2.9,0.4],[9,2.6,2.2],[10,2.8,1.3],[8.5,2.5,2.9]];
   var SPARKS = [[1.2,2.6,0.4],[1,2.4,1.6],[1.4,2.9,2.4],[1,2.5,0.9]];
   function spot() {
-    var r = Math.random(), x;
-    if (r < 0.5) x = 2 + Math.random() * 26;        // left, over the building
-    else if (r < 0.75) x = 70 + Math.random() * 25; // right edge
-    else x = 28 + Math.random() * 42;               // middle
-    if (Math.random() < 0.25) return [x, "calc(100% - " + (4 + Math.random() * 30).toFixed(1) + "cqw)"];
-    return [x, (12 + Math.random() * 120).toFixed(1) + "cqw"];
+    var r = Math.random();
+    if (r < 0.45) return [10 + Math.random() * 80, "calc(100% - " + (4 + Math.random() * 26).toFixed(1) + "cqw)"]; // bottom, around RSVP and button
+    if (r < 0.8) return [2 + Math.random() * 26, (12 + Math.random() * 110).toFixed(1) + "cqw"];                   // left, over the building
+    return [30 + Math.random() * 65, (12 + Math.random() * 110).toFixed(1) + "cqw"];                               // middle and right
   }
 
   // Don't show on the announcement page itself
@@ -47,7 +47,7 @@
     ".rgf-pop-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(17,22,38,.62);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transition:opacity .9s ease,-webkit-backdrop-filter 1.4s ease,backdrop-filter 1.4s ease}",
     ".rgf-pop-overlay.rgf-in{opacity:1;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}",
     ".rgf-pop-overlay.rgf-out{opacity:0;transition:opacity .4s ease}",
-    ".rgf-pop{position:relative;width:min(100%,600px,calc((100dvh - 32px) * .6));max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:radial-gradient(ellipse 62% 48% at 50% 46%,rgba(250,246,244,.68),rgba(250,246,244,0) 72%),linear-gradient(rgba(235,226,221,.78),rgba(235,226,221,.78)),url("+BG_URL+") 50% 0/cover no-repeat,#ebe2dd;background-attachment:local;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;opacity:0}",
+    ".rgf-pop{position:relative;width:min(100%,600px,calc((100dvh - 32px) * .6));max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:radial-gradient(ellipse 58% 46% at 50% 47%,rgba(252,249,246,.62),rgba(252,249,246,0) 72%),linear-gradient(rgba(246,241,237,.5),rgba(246,241,237,.5)),url("+BG_URL+") 50% 0/cover no-repeat,#ebe2dd;background-attachment:local;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;opacity:0}",
     ".rgf-pop-overlay.rgf-in .rgf-pop{animation:rgfCard 1.5s cubic-bezier(.16,1,.3,1) .1s both}",
     ".rgf-pop-frame{position:relative;margin:8px;border:1px solid rgba(201,164,92,.55);border-radius:10px;padding:5.5cqw 4cqw 3.8cqw;container-type:inline-size}",
     ".rgf-pop p{margin:0}",
@@ -77,7 +77,7 @@
     ".rgf-pop-times div+div{border-left:1px solid rgba(160,126,70,.6)}",
     ".rgf-pop-times b{display:block;font-size:max(14px,3.4cqw);font-weight:700;color:#a07e46}",
     ".rgf-pop-times span{font-size:max(10.5px,2.35cqw);color:#2b2f3a}",
-    ".rgf-pop-mission{margin:3cqw auto 0!important;max-width:66cqw;font-size:max(11px,2.53cqw);line-height:1.5;text-wrap:balance}",
+    ".rgf-pop-mission{margin:3cqw auto 0!important;max-width:74cqw;font-size:max(11px,2.53cqw);line-height:1.5;text-wrap:balance}",
     ".rgf-pop-mission strong{color:#1d2a4b}",
     ".rgf-pop-stay{margin:3cqw auto 0!important;max-width:84cqw;font-style:italic;font-weight:500;font-size:max(12px,3.1cqw);line-height:1.35;color:#8a6a35;text-wrap:balance}",
     ".rgf-pop-rsvp{margin:3cqw auto 0;width:max(230px,55cqw);max-width:100%;box-sizing:border-box;padding:2.4cqw 3cqw;border:2px solid #c9a45c;border-radius:14px;background:rgba(255,255,255,.45)}",
@@ -96,7 +96,7 @@
     "@keyframes rgfGlow{0%,100%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 0 rgba(201,164,92,0),0 0 0 0 rgba(255,236,190,0)}50%{box-shadow:0 10px 24px rgba(29,42,75,.2),0 0 0 9px rgba(201,164,92,.22),0 0 40px 14px rgba(255,236,190,.45)}}",
     "@keyframes rgfShine{from{background-position:100% 0}to{background-position:0 0}}",
     "@keyframes rgfFade{from{opacity:0}to{opacity:1}}",
-    "@keyframes rgfTwinkle{0%{opacity:0;transform:translate(-50%,-50%) scale(.92)}25%,60%{opacity:.6}90%,100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1)}}",
+    "@keyframes rgfTwinkle{0%{opacity:0;transform:translate(-50%,-50%) scale(.92)}25%,60%{opacity:.7}90%,100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1)}}",
     "@keyframes rgfFrame{from{border-color:rgba(201,164,92,0)}to{border-color:rgba(201,164,92,.55)}}",
     ".rgf-in .rgf-pop-frame{animation:rgfFrame 1.8s ease .6s both}",
     ".rgf-in .rgf-pop-frame>*{animation:rgfUp 1.1s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(.6s + var(--i) * 90ms)}",
@@ -108,8 +108,8 @@
   document.head.appendChild(css);
 
   function drift() {
-    var dx = (Math.random() < 0.5 ? -1 : 1) * (8 + Math.random() * 10);
-    var dy = (Math.random() - 0.5) * 8;
+    var dx = (Math.random() < 0.5 ? -1 : 1) * (7 + Math.random() * 7);
+    var dy = (Math.random() - 0.5) * 12;
     return "--dx:" + dx.toFixed(1) + "cqw;--dy:" + dy.toFixed(1) + "cqw";
   }
   function dot(cls, b) {
