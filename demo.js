@@ -30,7 +30,7 @@
   if (!VERSIONS[v]) v = "v4";
 
   var s = document.createElement("script");
-  s.src = VERSIONS[v].src + "?b=20261101a";   // bump with each deploy so phones skip stale cached copies
+  s.src = VERSIONS[v].src + "?b=20261101d";   // bump with each deploy so phones skip stale cached copies
   document.body.appendChild(s);
 
   var bar = document.createElement("div");
