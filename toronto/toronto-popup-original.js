@@ -57,6 +57,8 @@
     ".rgf-pop-times span{font-size:14px;color:#2b2f3a}",
     ".rgf-pop-mission{margin:18px auto 0!important;max-width:470px;font-size:15px;line-height:1.5;text-wrap:balance}",
     ".rgf-pop-mission strong{color:#1d2a4b}",
+    ".rgf-pop-mission p{margin:.7em 0 0!important}",
+    ".rgf-pop-mission .rgf-pop-mission-h{margin:0!important;font-weight:700;color:#1d2a4b}",
     ".rgf-pop-stay{margin:14px auto 0!important;max-width:470px;font-style:italic;font-weight:500;font-size:18px;line-height:1.35;color:#8a6a35;text-wrap:balance}",
     ".rgf-pop-rsvp{margin:18px auto 0;max-width:330px;padding:14px 16px;border:2px solid #c9a45c;border-radius:14px;background:rgba(255,255,255,.45)}",
     ".rgf-pop-rsvp-label{font-family:Montserrat,sans-serif;font-weight:700;font-size:12px;letter-spacing:.28em;padding-left:.28em;color:#8a6a35}",
@@ -105,7 +107,9 @@
           '<div><b>7:00 PM</b><span>Dinner &amp; Celebration</span></div>' +
         '</div>' +
       '</div>' +
-      '<p class="rgf-pop-mission">In loving memory of <strong>Ryan Gordy</strong>, supporting young adults impacted by cancer, in partnership with <strong>Princess Margaret Cancer Centre’s AYA Oncology Program</strong>.</p>' +
+      '<div class="rgf-pop-mission"><p class="rgf-pop-mission-h">Continuing Ryan’s Legacy. Inspiring Hope.</p>' +
+      '<p>Founded in honour of <strong>Ryan Gordy</strong>, whose life and spirit continue to inspire our purpose, the Ryan Gordy Foundation is dedicated to supporting young adults navigating cancer treatment.</p>' +
+      '<p>In partnership with <strong>Princess Margaret Cancer Centre’s Adolescent and Young Adult (AYA) Oncology Program</strong>, we provide meaningful support through financial assistance, wellness, and mental health initiatives — bringing comfort, strength, and hope to young adults and their families.</p></div>' +
       '<p class="rgf-pop-stay">All funds raised in Toronto stay in the Toronto community.</p>' +
       '<div class="rgf-pop-rsvp">' +
         '<p class="rgf-pop-rsvp-label">VIP RSVP</p>' +
