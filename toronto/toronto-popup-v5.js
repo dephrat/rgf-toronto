@@ -3,7 +3,8 @@
  *
  * Install: add this one line before </body> on the site (or in the
  * platform's "custom code / footer scripts" setting):
- *   <script src="/toronto/toronto-popup.js" defer></script>
+ *   <script src="https://rgf.onenewerax.com/toronto/toronto-popup-v5.js" defer></script>
+ * The logo, Wes Hall photo and background load from the same folder as the script.
  *
  * Behaviour: shows the full announcement once per visit. Closing it (X,
  * "Continue to site", clicking outside, or Esc) hides it for the rest of the
@@ -11,10 +12,12 @@
  * visit shows it again.
  */
 (function () {
-  var LOGO_URL = "/toronto/rgf-logo.png";
-  var PHOTO_URL = "/toronto/wes-hall.jpg";
+  // Images load from the same folder as this script, so it works on any site that includes it
+  var BASE = (document.currentScript && document.currentScript.src || "/toronto/").replace(/[^\/]*$/, "");
+  var LOGO_URL = BASE + "rgf-logo.png";
+  var PHOTO_URL = BASE + "wes-hall.jpg";
   var KEY = "rgfTorontoPopupClosedV5";
-  var BG_URL = "/toronto/ritz-toronto-bg.jpg";
+  var BG_URL = BASE + "ritz-toronto-bg.jpg";
   // Bokeh, measured from the reference video: out-of-focus discs (and a few pinpoint
   // sparkles) float in front of everything, glide mostly sideways (~5% of the card
   // width per second) while fading in and out, then reappear somewhere else.
