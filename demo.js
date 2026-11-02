@@ -4,7 +4,8 @@
  *   ?v=original  v1: the popup before the skyline and hotel frame
  *   ?v=skyline   v2: gold skyline, Ritz tower and hotel frame
  *   ?v=v3        v3: Ritz-Carlton / Toronto photo, bokeh, slower reveal
- *   ?v=v4        v4: v3 matched to the reference video (default)
+ *   ?v=v4        v4: v3 matched to the reference video
+ *   ?v=v5        v5: v4 tightened to fit the longer statement (default)
  * Opening a link with ?v= always shows that popup again.
  */
 (function () {
@@ -12,7 +13,8 @@
     original: { src: "/toronto/toronto-popup-original.js", label: "V1 Original" },
     skyline: { src: "/toronto/toronto-popup.js", label: "V2 Skyline" },
     v3: { src: "/toronto/toronto-popup-v3.js", label: "V3 Photo" },
-    v4: { src: "/toronto/toronto-popup-v4.js", label: "V4 Matched" }
+    v4: { src: "/toronto/toronto-popup-v4.js", label: "V4 Matched" },
+    v5: { src: "/toronto/toronto-popup-v5.js", label: "V5 Fitted" }
   };
   var params = new URLSearchParams(location.search);
   var v = params.get("v");
@@ -23,14 +25,15 @@
       sessionStorage.removeItem("rgfTorontoPopupClosedOriginal");
       sessionStorage.removeItem("rgfTorontoPopupClosedV3");
       sessionStorage.removeItem("rgfTorontoPopupClosedV4");
+      sessionStorage.removeItem("rgfTorontoPopupClosedV5");
     } else {
       v = sessionStorage.getItem("rgfDemoVersion");
     }
   } catch (e) {}
-  if (!VERSIONS[v]) v = "v4";
+  if (!VERSIONS[v]) v = "v5";
 
   var s = document.createElement("script");
-  s.src = VERSIONS[v].src + "?b=20261101d";   // bump with each deploy so phones skip stale cached copies
+  s.src = VERSIONS[v].src + "?b=20261101e";   // bump with each deploy so phones skip stale cached copies
   document.body.appendChild(s);
 
   var bar = document.createElement("div");
