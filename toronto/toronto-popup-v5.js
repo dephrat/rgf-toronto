@@ -50,9 +50,10 @@
   var css = document.createElement("style");
   css.textContent = [
     ".rgf-pop-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(17,22,38,.62);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transition:opacity .9s ease,-webkit-backdrop-filter 1.4s ease,backdrop-filter 1.4s ease}",
+    ".rgf-pop-overlay:not(.rgf-in){pointer-events:none}",
     ".rgf-pop-overlay.rgf-in{opacity:1;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}",
     ".rgf-pop-overlay.rgf-out{opacity:0;transition:opacity .4s ease}",
-    ".rgf-pop{--k:1;position:relative;container-type:inline-size;width:min(100%,600px,max(320px,calc((100dvh - 32px) * .6)));max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:radial-gradient(ellipse 58% 46% at 50% 47%,rgba(248,246,250,.66),rgba(248,246,250,0) 72%),linear-gradient(rgba(240,236,238,.56),rgba(240,236,238,.56)),url("+BG_URL+") 50% 0/cover no-repeat,#ebe2dd;background-attachment:local;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;opacity:0}",
+    ".rgf-pop{--k:1;position:relative;container-type:inline-size;width:min(100%,600px,max(320px,calc((100dvh - 32px) * .6)));max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:radial-gradient(ellipse 58% 46% at 50% 47%,rgba(248,246,250,.66),rgba(248,246,250,0) 72%),linear-gradient(rgba(240,236,238,.56),rgba(240,236,238,.56)),url("+BG_URL+") 50% 0/cover no-repeat,#ebe2dd;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;font-family:'Playfair Display',Georgia,serif;color:#2b2f3a;opacity:0}",
     ".rgf-pop-overlay.rgf-in .rgf-pop{animation:rgfCard 1.5s cubic-bezier(.16,1,.3,1) .1s both}",
     ".rgf-pop-frame{position:relative;margin:8px;border:1px solid rgba(201,164,92,.55);border-radius:10px;padding:"+L("5.5cqw","4cqw")+" 4cqw "+L("3.8cqw","3cqw")+";container-type:inline-size}",
     ".rgf-pop p{margin:0}",
@@ -203,15 +204,32 @@
     fits(lo);
   }
 
+  // Resolves once the fonts and both images are in (the logo has no height until it loads),
+  // or after 3s at most, so the card is measured once at its final size before it animates
+  function ready() {
+    var waits = [new Promise(function (r) { font.sheet ? r() : (font.onload = font.onerror = r); }).then(function () {
+      return document.fonts ? Promise.all([
+        document.fonts.load("800 1em 'Playfair Display'"), document.fonts.load("italic 500 1em 'Playfair Display'"),
+        document.fonts.load("700 1em Montserrat")
+      ]) : null;
+    })];
+    [].forEach.call(overlay.querySelectorAll("img"), function (img) {
+      if (!img.complete) waits.push(new Promise(function (r) { img.onload = img.onerror = r; }));
+    });
+    return Promise.race([Promise.all(waits).catch(function () {}), new Promise(function (r) { setTimeout(r, 3000); })]);
+  }
+
   function show() {
     document.body.appendChild(overlay);
-    fit();
-    window.addEventListener("resize", fit);
-    // Measure again once the fonts and images arrive (the logo has no height until it loads)
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
-    [].forEach.call(overlay.querySelectorAll("img"), function (img) { img.addEventListener("load", fit); });
-    requestAnimationFrame(function () { overlay.classList.add("rgf-in"); });
-    overlay.querySelector(".rgf-pop-x").focus();
+    ready().then(function () {
+      fit();
+      window.addEventListener("resize", fit);
+      // While the lines slide up into place, don't let the card flash a scrollbar
+      pop.style.overflow = "hidden";
+      setTimeout(function () { pop.style.overflow = ""; }, 3500);
+      requestAnimationFrame(function () { overlay.classList.add("rgf-in"); });
+      overlay.querySelector(".rgf-pop-x").focus();
+    });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", show);
   else show();
