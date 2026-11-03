@@ -144,7 +144,7 @@
       '<p>In partnership with <strong>Princess Margaret Cancer Centre’s Adolescent and Young Adult (AYA) Oncology Program</strong>, we provide meaningful support through financial assistance, wellness, and mental health initiatives — bringing comfort, strength, and hope to young adults and their families.</p></div>' +
       '<p class="rgf-pop-stay">All funds raised in Toronto stay in the Toronto community.</p>' +
       '<div class="rgf-pop-rsvp">' +
-        '<p class="rgf-pop-rsvp-label">VIP RSVP</p>' +
+        '<p class="rgf-pop-rsvp-label">FOR MORE INFORMATION</p>' +
         '<a href="mailto:Anita@ryangordyfoundation.org?subject=Power%20of%20Love%20Gala%20Toronto%20RSVP">Anita@ryangordyfoundation.org</a>' +
         '<p class="rgf-pop-only">By invitation only</p>' +
       '</div>' +
